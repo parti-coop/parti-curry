@@ -1,0 +1,23 @@
+%section.bs-component
+  .jumbotron
+    %h2 감시
+    %p 정부입법지원 센터에서 제공하는 데이터입니다.
+
+  %table.table
+    %thead
+      %tr
+        %th #
+        %th 구분
+        %th 제목
+        %th 날짜
+    %tbody
+      - @notices.map(&:specific).each do |notice|
+        %tr
+          %th(scope='row')
+            = link_to notice.acting_as.id, notice.acting_as
+          %td
+            = link_to notice.source, notice.acting_as
+          %td
+            = link_to notice.title, notice.acting_as
+          %td
+            = link_to notice.created_at, notice.acting_as

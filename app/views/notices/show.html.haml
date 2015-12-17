@@ -1,0 +1,14 @@
+%section.bs-component
+  .jumbotron
+    %h2 감시
+    %p 정부입법지원 센터에서 제공하는 데이터입니다.
+
+  %h4
+    \#
+    = @notice.source
+    \-
+    = @notice.id
+    = @notice.title
+    %small= @notice.created_at
+  %hr
+  .row= sanitize(@notice.description)
