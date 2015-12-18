@@ -1,0 +1,6 @@
+%ul
+- Rufus::Scheduler.singleton.jobs(tag: 'lawmaking').each do |job|
+  %li
+    = job.id
+    \:
+    = job.next_time

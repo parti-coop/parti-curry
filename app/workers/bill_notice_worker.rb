@@ -1,7 +1,18 @@
+require 'open-uri'
+
 class BillNoticeWorker
   class << self
     def any?(data, key)
       data.has_key?(key) and data[key].try(:any?)
+    end
+
+    def scrap_draft_bills_by_url(list, &block)
+      Rails.logger.info "URL : #{list}"
+      xml = open(list).read
+      scrap_draft_bills(xml) do |notice|
+        Rails.logger.info "URL : #{yield(notice)}"
+        open(yield(notice)).read
+      end
     end
 
     def scrap_draft_bills(xml)
@@ -21,7 +32,17 @@ class BillNoticeWorker
       end
     rescue => e
       Rails.logger.error e
-      throw e if !Rails.env.staging?
+      Rails.logger.error e.backtrace
+      raise e if !Rails.env.staging?
+    end
+
+    def scrap_administrative_by_url(list, &block)
+      Rails.logger.info "URL : #{list}"
+      xml = open(list).read
+      scrap_administrative(xml) do |notice|
+        Rails.logger.info "URL : #{yield(notice)}"
+        open(yield(notice)).read
+      end
     end
 
     def scrap_administrative(xml)
@@ -41,7 +62,8 @@ class BillNoticeWorker
       end
     rescue => e
       Rails.logger.error e
-      throw e if !Rails.env.staging?
+      Rails.logger.error e.backtrace
+      raise e if !Rails.env.staging?
     end
   end
 end
